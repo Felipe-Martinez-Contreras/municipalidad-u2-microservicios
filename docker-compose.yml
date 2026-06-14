@@ -1,0 +1,253 @@
+services:
+
+  # ─── BASES DE DATOS ───────────────────────────────────────────────────────
+
+  db-auth:
+    image: postgres:16-alpine
+    container_name: db-auth
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AUTH_DB_NAME}
+      POSTGRES_USER: ${AUTH_DB_USER}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+    volumes:
+      - db_auth_data:/var/lib/postgresql/data
+    networks:
+      - red-auth
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${AUTH_DB_USER} -d ${AUTH_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-tramites:
+    image: postgres:16-alpine
+    container_name: db-tramites
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${TRAMITES_DB_NAME}
+      POSTGRES_USER: ${TRAMITES_DB_USER}
+      POSTGRES_PASSWORD: ${TRAMITES_DB_PASSWORD}
+    volumes:
+      - db_tramites_data:/var/lib/postgresql/data
+    networks:
+      - red-tramites
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TRAMITES_DB_USER} -d ${TRAMITES_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-bodega:
+    image: postgres:16-alpine
+    container_name: db-bodega
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${BODEGA_DB_NAME}
+      POSTGRES_USER: ${BODEGA_DB_USER}
+      POSTGRES_PASSWORD: ${BODEGA_DB_PASSWORD}
+    volumes:
+      - db_bodega_data:/var/lib/postgresql/data
+    networks:
+      - red-bodega
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${BODEGA_DB_USER} -d ${BODEGA_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── MICROSERVICIOS ───────────────────────────────────────────────────────
+
+  servicio-auth:
+    build:
+      context: ./services/servicio-auth
+    container_name: servicio-auth
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${AUTH_SECRET_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DB_NAME: ${AUTH_DB_NAME}
+      DB_USER: ${AUTH_DB_USER}
+      DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      DB_HOST: db-auth
+      DB_PORT: 5432
+    depends_on:
+      db-auth:
+        condition: service_healthy
+    networks:
+      - red-auth
+      - red-gateway
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -o /dev/null -w '%{http_code}' http://localhost:8000/api/auth/verificar/ | grep -qE '401|200'"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+  servicio-tramites:
+    build:
+      context: ./services/servicio-tramites
+    container_name: servicio-tramites
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${TRAMITES_SECRET_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DB_NAME: ${TRAMITES_DB_NAME}
+      DB_USER: ${TRAMITES_DB_USER}
+      DB_PASSWORD: ${TRAMITES_DB_PASSWORD}
+      DB_HOST: db-tramites
+      DB_PORT: 5432
+      AUTH_SERVICE_URL: http://servicio-auth:8000
+    depends_on:
+      db-tramites:
+        condition: service_healthy
+      servicio-auth:
+        condition: service_healthy
+    networks:
+      - red-tramites
+      - red-gateway
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -o /dev/null -w '%{http_code}' http://localhost:8000/tramites/tipos/ | grep -qE '401|200'"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+  servicio-bodega:
+    build:
+      context: ./services/servicio-bodega
+    container_name: servicio-bodega
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${BODEGA_SECRET_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DB_NAME: ${BODEGA_DB_NAME}
+      DB_USER: ${BODEGA_DB_USER}
+      DB_PASSWORD: ${BODEGA_DB_PASSWORD}
+      DB_HOST: db-bodega
+      DB_PORT: 5432
+      AUTH_SERVICE_URL: http://servicio-auth:8000
+    depends_on:
+      db-bodega:
+        condition: service_healthy
+      servicio-auth:
+        condition: service_healthy
+    networks:
+      - red-bodega
+      - red-gateway
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -o /dev/null -w '%{http_code}' http://localhost:8000/bodega/categorias/ | grep -qE '401|200'"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+
+  servicio-portal:
+    build:
+      context: ./services/servicio-portal
+    container_name: servicio-portal
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${PORTAL_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      AUTH_SERVICE_URL: http://servicio-auth:8000
+      TRAMITES_SERVICE_URL: http://servicio-tramites:8000
+      BODEGA_SERVICE_URL: http://servicio-bodega:8000
+    depends_on:
+      servicio-auth:
+        condition: service_healthy
+    networks:
+      - red-gateway
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+
+  # ─── NGINX GATEWAY ────────────────────────────────────────────────────────
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx-gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./infrastructure/proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - servicio-auth
+      - servicio-tramites
+      - servicio-bodega
+    networks:
+      - red-gateway
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── MONITOREO ────────────────────────────────────────────────────────────
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - red-monitoreo
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9090/-/healthy || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - red-monitoreo
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ─── REDES ────────────────────────────────────────────────────────────────────
+
+networks:
+  red-auth:
+    driver: bridge
+  red-tramites:
+    driver: bridge
+  red-bodega:
+    driver: bridge
+  red-gateway:
+    driver: bridge
+  red-monitoreo:
+    driver: bridge
+
+# ─── VOLÚMENES ────────────────────────────────────────────────────────────────
+
+volumes:
+  db_auth_data:
+  db_tramites_data:
+  db_bodega_data:
+  prometheus_data:
+  grafana_data:

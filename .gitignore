@@ -1,0 +1,21 @@
+# Entornos
+.env
+*/.env
+**/.env
+
+# Python / Django
+__pycache__/
+*.pyc
+*.pyo
+db.sqlite3
+staticfiles/
+media/
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+*.swp
+.DS_Store

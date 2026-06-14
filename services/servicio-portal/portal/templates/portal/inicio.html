@@ -1,0 +1,61 @@
+{# portal/templates/portal/inicio.html #}
+{# Página de bienvenida pública del Portal Municipal #}
+{% extends 'portal/base.html' %}
+{% load static %}
+
+{% block titulo %}Inicio - Portal Municipal La Estrella{% endblock %}
+
+{% block contenido %}
+<!-- Hero de bienvenida -->
+<div class="bg-light py-5 rounded-3 mb-4" style="background: linear-gradient(135deg, #1a5276, #2e86c1);">
+  <div class="container py-5 text-center text-white">
+    <i class="bi bi-building" style="font-size: 3rem;"></i>
+    <h1 class="display-4 fw-bold mt-3">Portal Municipal La Estrella</h1>
+    <p class="lead mb-4">
+      Realiza tus trámites en línea, consulta el estado de tus solicitudes y accede a los servicios municipales de forma rápida y segura.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'login' %}" class="btn btn-light btn-lg px-4 fw-semibold text-primary">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+      </a>
+      <a href="{% url 'registro' %}" class="btn btn-outline-light btn-lg px-4 fw-semibold">
+        <i class="bi bi-person-plus me-2"></i>Registrarse
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Módulos del sistema -->
+<div class="container">
+  <h2 class="text-center mb-4 fw-bold" style="color: var(--color-municipal);">Nuestros Servicios</h2>
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm text-center">
+        <div class="card-body p-4">
+          <i class="bi bi-file-earmark-text text-primary" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title mt-3 fw-bold">Trámites en Línea</h5>
+          <p class="card-text text-muted">Ingresa solicitudes, adjunta documentos y recibe confirmación por correo electrónico.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm text-center">
+        <div class="card-body p-4">
+          <i class="bi bi-search text-primary" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title mt-3 fw-bold">Seguimiento</h5>
+          <p class="card-text text-muted">Consulta el estado de tus trámites en tiempo real con tu número de solicitud.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm text-center">
+        <div class="card-body p-4">
+          <i class="bi bi-box-seam text-primary" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title mt-3 fw-bold">Gestión de Bodega</h5>
+          <p class="card-text text-muted">Control de inventario, solicitudes internas y seguimiento de stock.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
