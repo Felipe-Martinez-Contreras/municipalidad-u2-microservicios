@@ -9,24 +9,9 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # ─── NGINX ────────────────────────────────────────────────────────────────
+  # ─── NGINX (stub_status, formato Prometheus vía exporter no disponible) ──
+  # nginx stub_status no es formato Prometheus nativo, pero confirma
+  # disponibilidad del gateway (up/down)
   - job_name: 'nginx'
     static_configs:
-      - targets: ['nginx-gateway:80']
-    metrics_path: /health
-
-  # ─── SERVICIOS DJANGO ─────────────────────────────────────────────────────
-  - job_name: 'servicio-auth'
-    static_configs:
-      - targets: ['servicio-auth:8000']
-    metrics_path: /api/auth/verificar/
-
-  - job_name: 'servicio-tramites'
-    static_configs:
-      - targets: ['servicio-tramites:8000']
-    metrics_path: /tramites/tipos/
-
-  - job_name: 'servicio-bodega'
-    static_configs:
-      - targets: ['servicio-bodega:8000']
-    metrics_path: /bodega/categorias/
+      - targets: ['nginx-exporter:9113']

@@ -1,0 +1,121 @@
+{% extends 'portal/base.html' %}
+{% block titulo %}{{ titulo }} - Portal Municipal{% endblock %}
+{% block contenido %}
+<div class="container-fluid">
+  <div class="row g-4">
+    <div class="col-md-8">
+
+      <!-- Detalle principal -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0">
+              <i class="bi bi-file-earmark-text me-2 text-primary"></i>{{ tramite.codigo_seguimiento }}
+            </h4>
+            <span class="badge {{ tramite.estado_badge }} fs-6">{{ tramite.estado_display }}</span>
+          </div>
+          <hr>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="mb-1 text-muted small">Tipo de trámite</p>
+              <p class="fw-semibold">{{ tramite.tipo_nombre }}</p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1 text-muted small">Fecha de ingreso</p>
+              <p class="fw-semibold">{{ tramite.creado_en|slice:":10" }}</p>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="mb-1 text-muted small">Ciudadano</p>
+              <p class="fw-semibold">{{ tramite.ciudadano_nombre }}</p>
+              <p class="text-muted small">{{ tramite.ciudadano_rut }} — {{ tramite.ciudadano_email }}</p>
+            </div>
+            {% if tramite.funcionario_nombre %}
+            <div class="col-md-6">
+              <p class="mb-1 text-muted small">Funcionario asignado</p>
+              <p class="fw-semibold">{{ tramite.funcionario_nombre }}</p>
+            </div>
+            {% endif %}
+          </div>
+          <div class="mb-3">
+            <p class="mb-1 text-muted small">Descripción</p>
+            <p>{{ tramite.descripcion }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historial -->
+      {% if tramite.historial %}
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Historial</h5>
+          {% for h in tramite.historial %}
+          <div class="border-start border-primary ps-3 mb-3">
+            <p class="mb-0 fw-semibold">
+              {% if h.accion == 'creacion' %}Creación del trámite
+              {% elif h.accion == 'cambio_estado' %}Cambio de estado
+              {% elif h.accion == 'asignacion' %}Asignación a funcionario
+              {% elif h.accion == 'observacion' %}Observación agregada
+              {% elif h.accion == 'documento_adjunto' %}Documento adjuntado
+              {% else %}{{ h.accion }}{% endif %}
+            </p>
+            {% if h.estado_anterior and h.estado_nuevo %}
+            <p class="mb-0 text-muted small">{{ h.estado_anterior }} → {{ h.estado_nuevo }}</p>
+            {% endif %}
+            {% if h.observacion %}
+            <p class="mb-0 text-muted small">{{ h.observacion }}</p>
+            {% endif %}
+            <p class="mb-0 text-muted small">{{ h.fecha|slice:":16" }} — {{ h.usuario_nombre }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <div class="col-md-4">
+
+      <!-- Cambiar estado — solo funcionarios/admin -->
+      {% if puede_cambiar_estado %}
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-arrow-repeat me-2"></i>Cambiar Estado</h5>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="cambiar_estado">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Nuevo estado</label>
+              <select name="estado" class="form-select" required>
+                <option value="">Seleccione...</option>
+                <option value="en_revision">En revisión</option>
+                <option value="observado">Observado</option>
+                <option value="aprobado">Aprobado</option>
+                <option value="rechazado">Rechazado</option>
+                <option value="finalizado">Finalizado</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Observación</label>
+              <textarea name="observacion" class="form-control" rows="3"
+                placeholder="Opcional..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-check-circle me-2"></i>Actualizar Estado
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="mt-2">
+        <a href="{% url 'mis_tramites' %}" class="btn btn-outline-secondary w-100">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

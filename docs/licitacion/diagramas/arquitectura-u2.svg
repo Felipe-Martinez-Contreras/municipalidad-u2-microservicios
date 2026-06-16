@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="960" height="580" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <rect width="960" height="580" fill="#f0f4f8" rx="12"/>
+  <text x="480" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a5276">Arquitectura Containerizada — Unidad 2 · Docker Compose</text>
+
+  <!-- Cliente -->
+  <rect x="390" y="48" width="180" height="42" rx="8" fill="#2980b9" stroke="#1a5276" stroke-width="2"/>
+  <text x="480" y="66" text-anchor="middle" font-size="12" font-weight="bold" fill="white">🌐 Cliente · :80</text>
+  <text x="480" y="82" text-anchor="middle" font-size="10" fill="#d6eaf8">34.176.168.175</text>
+
+  <line x1="480" y1="90" x2="480" y2="112" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- NGINX -->
+  <rect x="330" y="112" width="300" height="42" rx="8" fill="#1a5276" stroke="#0d2b45" stroke-width="2"/>
+  <text x="480" y="130" text-anchor="middle" font-size="12" font-weight="bold" fill="white">🔀 nginx · Gateway</text>
+  <text x="480" y="146" text-anchor="middle" font-size="10" fill="#aed6f1">nginx:1.25-alpine · Enrutamiento por path</text>
+
+  <!-- red-gateway box -->
+  <rect x="20" y="168" width="920" height="148" rx="10" fill="#eaf4fb" stroke="#2980b9" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="36" y="184" font-size="10" fill="#2980b9" font-weight="bold">red-gateway</text>
+
+  <!-- Flechas NGINX → servicios -->
+  <line x1="360" y1="154" x2="100" y2="178" stroke="#555" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="420" y1="154" x2="270" y2="178" stroke="#555" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="480" y1="154" x2="480" y2="178" stroke="#555" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="560" y1="154" x2="670" y2="178" stroke="#555" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="610" y1="154" x2="840" y2="178" stroke="#555" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- servicio-1 -->
+  <rect x="30" y="178" width="140" height="58" rx="8" fill="#1e8449" stroke="#145a32" stroke-width="2"/>
+  <text x="100" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="white">servicio-1</text>
+  <text x="100" y="213" text-anchor="middle" font-size="10" fill="#a9dfbf">Auth · JWT</text>
+  <text x="100" y="226" text-anchor="middle" font-size="9" fill="#a9dfbf">python:3.12-slim</text>
+
+  <!-- servicio-2 -->
+  <rect x="195" y="178" width="140" height="58" rx="8" fill="#7d3c98" stroke="#4a235a" stroke-width="2"/>
+  <text x="265" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="white">servicio-2</text>
+  <text x="265" y="213" text-anchor="middle" font-size="10" fill="#d7bde2">Trámites</text>
+  <text x="265" y="226" text-anchor="middle" font-size="9" fill="#d7bde2">python:3.12-slim</text>
+
+  <!-- frontend -->
+  <rect x="410" y="178" width="140" height="58" rx="8" fill="#d35400" stroke="#784212" stroke-width="2"/>
+  <text x="480" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="white">frontend</text>
+  <text x="480" y="213" text-anchor="middle" font-size="10" fill="#fad7a0">Portal Web</text>
+  <text x="480" y="226" text-anchor="middle" font-size="9" fill="#fad7a0">python:3.12-slim</text>
+
+  <!-- servicio-3 x2 -->
+  <rect x="600" y="178" width="140" height="58" rx="8" fill="#1a5276" stroke="#0d2b45" stroke-width="2"/>
+  <text x="670" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="white">servicio-3 ×2</text>
+  <text x="670" y="213" text-anchor="middle" font-size="10" fill="#aed6f1">Bodega · HA</text>
+  <text x="670" y="226" text-anchor="middle" font-size="9" fill="#aed6f1">python:3.12-slim</text>
+
+  <!-- ai-service -->
+  <rect x="770" y="178" width="140" height="58" rx="8" fill="#b7950b" stroke="#7d6608" stroke-width="2"/>
+  <text x="840" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="white">ai-service</text>
+  <text x="840" y="213" text-anchor="middle" font-size="10" fill="#fef9e7">IA · Gemini API</text>
+  <text x="840" y="226" text-anchor="middle" font-size="9" fill="#fef9e7">python:3.12-slim</text>
+
+  <!-- Bases de datos -->
+  <!-- red-auth -->
+  <rect x="20" y="340" width="180" height="80" rx="10" fill="#fef9e7" stroke="#922b21" stroke-width="1.5" stroke-dasharray="5,2"/>
+  <text x="30" y="356" font-size="9" fill="#922b21" font-weight="bold">red-auth</text>
+  <line x1="100" y1="236" x2="100" y2="362" stroke="#888" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a)"/>
+  <rect x="40" y="362" width="140" height="44" rx="8" fill="#922b21" stroke="#641e16" stroke-width="2"/>
+  <text x="110" y="382" text-anchor="middle" font-size="11" font-weight="bold" fill="white">db-auth</text>
+  <text x="110" y="397" text-anchor="middle" font-size="9" fill="#fadbd8">postgres:16-alpine</text>
+
+  <!-- red-tramites -->
+  <rect x="185" y="340" width="180" height="80" rx="10" fill="#f5eef8" stroke="#7d3c98" stroke-width="1.5" stroke-dasharray="5,2"/>
+  <text x="195" y="356" font-size="9" fill="#7d3c98" font-weight="bold">red-tramites</text>
+  <line x1="265" y1="236" x2="265" y2="362" stroke="#888" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a)"/>
+  <rect x="205" y="362" width="140" height="44" rx="8" fill="#922b21" stroke="#641e16" stroke-width="2"/>
+  <text x="275" y="382" text-anchor="middle" font-size="11" font-weight="bold" fill="white">db-tramites</text>
+  <text x="275" y="397" text-anchor="middle" font-size="9" fill="#fadbd8">postgres:16-alpine</text>
+
+  <!-- red-bodega -->
+  <rect x="560" y="340" width="280" height="80" rx="10" fill="#eaf4fb" stroke="#1a5276" stroke-width="1.5" stroke-dasharray="5,2"/>
+  <text x="570" y="356" font-size="9" fill="#1a5276" font-weight="bold">red-bodega</text>
+  <line x1="670" y1="236" x2="670" y2="362" stroke="#888" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a)"/>
+  <line x1="840" y1="236" x2="730" y2="362" stroke="#888" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a)"/>
+  <rect x="580" y="362" width="140" height="44" rx="8" fill="#922b21" stroke="#641e16" stroke-width="2"/>
+  <text x="650" y="382" text-anchor="middle" font-size="11" font-weight="bold" fill="white">db-bodega</text>
+  <text x="650" y="397" text-anchor="middle" font-size="9" fill="#fadbd8">postgres:16-alpine</text>
+
+  <!-- Monitoreo -->
+  <rect x="20" y="445" width="920" height="80" rx="10" fill="#fdfefe" stroke="#aab7b8" stroke-width="1.5" stroke-dasharray="5,2"/>
+  <text x="36" y="461" font-size="10" fill="#626567" font-weight="bold">red-monitoreo</text>
+
+  <rect x="280" y="465" width="150" height="44" rx="8" fill="#c0392b" stroke="#922b21" stroke-width="2"/>
+  <text x="355" y="483" text-anchor="middle" font-size="11" font-weight="bold" fill="white">prometheus</text>
+  <text x="355" y="499" text-anchor="middle" font-size="9" fill="#fadbd8">prom/prometheus:v2.51.0</text>
+
+  <rect x="460" y="465" width="150" height="44" rx="8" fill="#e67e22" stroke="#ca6f1e" stroke-width="2"/>
+  <text x="535" y="483" text-anchor="middle" font-size="11" font-weight="bold" fill="white">grafana</text>
+  <text x="535" y="499" text-anchor="middle" font-size="9" fill="#fef9e7">grafana/grafana:10.4.0 · :3000</text>
+
+  <line x1="430" y1="487" x2="460" y2="487" stroke="#aaa" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Volúmenes -->
+  <text x="680" y="475" font-size="10" font-weight="bold" fill="#626567">📦 Volúmenes persistentes</text>
+  <text x="680" y="491" font-size="9" fill="#888">db_auth_data · db_tramites_data</text>
+  <text x="680" y="505" font-size="9" fill="#888">db_bodega_data · prometheus_data · grafana_data</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="620" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <!-- Fondo -->
+  <rect width="900" height="620" fill="#f0f4f8" rx="12"/>
+
+  <!-- Título -->
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a5276">Arquitectura General — Portal Municipal La Estrella</text>
+
+  <!-- ── CLIENTE ── -->
+  <rect x="370" y="55" width="160" height="48" rx="8" fill="#2980b9" stroke="#1a5276" stroke-width="2"/>
+  <text x="450" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="white">🌐 Cliente</text>
+  <text x="450" y="93" text-anchor="middle" font-size="11" fill="#d6eaf8">Navegador Web</text>
+
+  <!-- Flecha Cliente → Nginx -->
+  <line x1="450" y1="103" x2="450" y2="133" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="460" y="122" font-size="10" fill="#555">HTTP :80</text>
+
+  <!-- ── NGINX GATEWAY ── -->
+  <rect x="300" y="133" width="300" height="48" rx="8" fill="#1a5276" stroke="#0d2b45" stroke-width="2"/>
+  <text x="450" y="153" text-anchor="middle" font-size="13" font-weight="bold" fill="white">🔀 NGINX Gateway</text>
+  <text x="450" y="171" text-anchor="middle" font-size="11" fill="#aed6f1">Proxy inverso · Enrutamiento</text>
+
+  <!-- ── RED GATEWAY ── -->
+  <rect x="40" y="205" width="820" height="200" rx="10" fill="#eaf4fb" stroke="#2980b9" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="55" y="222" font-size="11" fill="#2980b9" font-weight="bold">red-gateway</text>
+
+  <!-- Flechas Nginx → Servicios -->
+  <line x1="200" y1="181" x2="130" y2="215" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="181" x2="310" y2="215" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="450" y1="181" x2="450" y2="215" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="560" y1="181" x2="590" y2="215" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="700" y1="181" x2="770" y2="215" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- servicio-1: Auth -->
+  <rect x="55" y="215" width="150" height="56" rx="8" fill="#1e8449" stroke="#145a32" stroke-width="2"/>
+  <text x="130" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="white">servicio-1</text>
+  <text x="130" y="252" text-anchor="middle" font-size="11" fill="#a9dfbf">Auth · JWT</text>
+  <text x="130" y="265" text-anchor="middle" font-size="10" fill="#a9dfbf">:8000</text>
+
+  <!-- servicio-2: Trámites -->
+  <rect x="230" y="215" width="150" height="56" rx="8" fill="#7d3c98" stroke="#4a235a" stroke-width="2"/>
+  <text x="305" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="white">servicio-2</text>
+  <text x="305" y="252" text-anchor="middle" font-size="11" fill="#d7bde2">Trámites</text>
+  <text x="305" y="265" text-anchor="middle" font-size="10" fill="#d7bde2">:8000</text>
+
+  <!-- frontend: Portal -->
+  <rect x="375" y="215" width="150" height="56" rx="8" fill="#d35400" stroke="#784212" stroke-width="2"/>
+  <text x="450" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="white">frontend</text>
+  <text x="450" y="252" text-anchor="middle" font-size="11" fill="#fad7a0">Portal Web</text>
+  <text x="450" y="265" text-anchor="middle" font-size="10" fill="#fad7a0">:8000</text>
+
+  <!-- servicio-3: Bodega (x2) -->
+  <rect x="520" y="215" width="150" height="56" rx="8" fill="#1a5276" stroke="#0d2b45" stroke-width="2"/>
+  <text x="595" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="white">servicio-3 ×2</text>
+  <text x="595" y="252" text-anchor="middle" font-size="11" fill="#aed6f1">Bodega · HA</text>
+  <text x="595" y="265" text-anchor="middle" font-size="10" fill="#aed6f1">:8000</text>
+
+  <!-- ai-service -->
+  <rect x="695" y="215" width="150" height="56" rx="8" fill="#b7950b" stroke="#7d6608" stroke-width="2"/>
+  <text x="770" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="white">ai-service</text>
+  <text x="770" y="252" text-anchor="middle" font-size="11" fill="#fef9e7">IA · Gemini</text>
+  <text x="770" y="265" text-anchor="middle" font-size="10" fill="#fef9e7">:8000</text>
+
+  <!-- ── BASES DE DATOS ── -->
+  <!-- db-auth -->
+  <line x1="130" y1="271" x2="130" y2="340" stroke="#888" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+  <rect x="55" y="340" width="150" height="48" rx="8" fill="#922b21" stroke="#641e16" stroke-width="2"/>
+  <text x="130" y="360" text-anchor="middle" font-size="12" font-weight="bold" fill="white">db-auth</text>
+  <text x="130" y="378" text-anchor="middle" font-size="10" fill="#fadbd8">PostgreSQL 16</text>
+
+  <!-- db-tramites -->
+  <line x1="305" y1="271" x2="305" y2="340" stroke="#888" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+  <rect x="230" y="340" width="150" height="48" rx="8" fill="#922b21" stroke="#641e16" stroke-width="2"/>
+  <text x="305" y="360" text-anchor="middle" font-size="12" font-weight="bold" fill="white">db-tramites</text>
+  <text x="305" y="378" text-anchor="middle" font-size="10" fill="#fadbd8">PostgreSQL 16</text>
+
+  <!-- db-bodega -->
+  <line x1="595" y1="271" x2="595" y2="340" stroke="#888" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+  <rect x="520" y="340" width="150" height="48" rx="8" fill="#922b21" stroke="#641e16" stroke-width="2"/>
+  <text x="595" y="360" text-anchor="middle" font-size="12" font-weight="bold" fill="white">db-bodega</text>
+  <text x="595" y="378" text-anchor="middle" font-size="10" fill="#fadbd8">PostgreSQL 16</text>
+
+  <!-- ── MONITOREO ── -->
+  <rect x="40" y="420" width="820" height="90" rx="10" fill="#fdfefe" stroke="#aab7b8" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="55" y="438" font-size="11" fill="#626567" font-weight="bold">red-monitoreo</text>
+
+  <rect x="280" y="445" width="150" height="48" rx="8" fill="#c0392b" stroke="#922b21" stroke-width="2"/>
+  <text x="355" y="465" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Prometheus</text>
+  <text x="355" y="483" text-anchor="middle" font-size="10" fill="#fadbd8">Métricas :9090</text>
+
+  <rect x="470" y="445" width="150" height="48" rx="8" fill="#e67e22" stroke="#ca6f1e" stroke-width="2"/>
+  <text x="545" y="465" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Grafana</text>
+  <text x="545" y="483" text-anchor="middle" font-size="10" fill="#fef9e7">Dashboards :3000</text>
+
+  <line x1="430" y1="469" x2="470" y2="469" stroke="#aaa" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ── JWT label ── -->
+  <rect x="60" y="530" width="780" height="72" rx="8" fill="#eafaf1" stroke="#1e8449" stroke-width="1"/>
+  <text x="450" y="550" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e8449">Autenticación JWT</text>
+  <text x="450" y="568" text-anchor="middle" font-size="11" fill="#555">servicio-1 emite tokens firmados · servicio-2, servicio-3 y ai-service los validan localmente</text>
+  <text x="450" y="585" text-anchor="middle" font-size="11" fill="#555">JWT incluye: user_id · email · rol · departamento · rut — sin consultar BD de usuarios</text>
+
+  <!-- Definición de flecha -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+  </defs>
+
+</svg>

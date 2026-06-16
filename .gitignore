@@ -19,3 +19,9 @@ venv/
 .vscode/
 *.swp
 .DS_Store
+
+# Backups de base de datos (contienen datos reales)
+scripts/backup/backups/*.sql
+
+# Archivo de respaldo histórico (pesado, no es código activo)
+docs/municipalidad_web_backup.tar.gz

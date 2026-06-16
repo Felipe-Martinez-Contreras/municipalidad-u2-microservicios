@@ -1,0 +1,50 @@
+{% extends 'portal/base.html' %}
+{% block titulo %}Solicitudes de Bodega - Portal Municipal{% endblock %}
+{% block contenido %}
+<div class="container-fluid">
+  <h4 class="fw-bold mb-4"><i class="bi bi-list-check me-2"></i>Solicitudes de Bodega</h4>
+
+  {% if solicitudes %}
+  <div class="card shadow-sm border-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Código</th>
+            <th>Departamento</th>
+            <th>Solicitante</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in solicitudes %}
+          <tr>
+            <td class="fw-semibold"><a href="/portal/bodega/solicitudes/{{ s.id }}/">{{ s.codigo }}</a></td>
+            <td>{{ s.departamento_solicitante }}</td>
+            <td>{{ s.solicitante_nombre }}</td>
+            <td>
+              <span class="badge
+                {% if s.estado == 'aprobada' %}bg-success
+                {% elif s.estado == 'rechazada' %}bg-danger
+                {% elif s.estado == 'entregada' %}bg-secondary
+                {% elif s.estado == 'pendiente' %}bg-warning text-dark
+                {% else %}bg-primary{% endif %}">
+                {{ s.estado|capfirst }}
+              </span>
+            </td>
+            <td><small>{{ s.creado_en|slice:":10" }}</small></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="bi bi-list text-muted" style="font-size: 3rem;"></i>
+    <p class="text-muted mt-3">No hay solicitudes registradas.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

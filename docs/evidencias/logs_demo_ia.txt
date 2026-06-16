@@ -1,0 +1,23 @@
+servicio-portal-1  | 
+servicio-portal-1  | 0 static files copied to '/app/staticfiles'.
+servicio-portal-1  | /usr/local/lib/python3.12/site-packages/django/core/handlers/base.py:61: UserWarning: No directory at: /app/staticfiles/
+servicio-portal-1  |   mw_instance = middleware(adapted_handler)
+servicio-portal-1  | [15/Jun/2026 14:55:55] "GET / HTTP/1.1" 200 4682
+servicio-portal-1  | [15/Jun/2026 14:56:25] "GET / HTTP/1.1" 200 4682
+servicio-portal-1  | [15/Jun/2026 14:56:55] "GET / HTTP/1.1" 200 4682
+servicio-portal-1  | [15/Jun/2026 14:57:25] "GET / HTTP/1.1" 200 4682
+servicio-portal-1  | [15/Jun/2026 14:57:29] "GET /portal/bodega/ HTTP/1.0" 302 0
+servicio-portal-1  | [15/Jun/2026 14:57:29] "GET /login/ HTTP/1.0" 200 4180
+servicio-portal-1  | [15/Jun/2026 14:57:35] "POST /login/ HTTP/1.0" 302 0
+servicio-portal-1  | [15/Jun/2026 14:57:35] "GET /dashboard/ HTTP/1.0" 200 4820
+servicio-portal-1  | [15/Jun/2026 14:57:36] "GET /portal/bodega/ HTTP/1.0" 200 7408
+servicio-portal-1  | [15/Jun/2026 14:57:53] "GET /portal/bodega/analisis-ia/ HTTP/1.0" 200 1398
+servicio-portal-1  | [15/Jun/2026 14:57:55] "GET / HTTP/1.1" 200 4682
+servicio-portal-1  | [15/Jun/2026 14:58:25] "GET / HTTP/1.1" 200 4682
+servicio-portal-1  | [15/Jun/2026 14:58:55] "GET / HTTP/1.1" 200 4682
+servicio-ia-1      | [2026-06-15 18:43:02 +0000] [1] [INFO] Starting gunicorn 22.0.0
+servicio-ia-1      | [2026-06-15 18:43:02 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+servicio-ia-1      | [2026-06-15 18:43:02 +0000] [1] [INFO] Using worker: sync
+servicio-ia-1      | [2026-06-15 18:43:02 +0000] [7] [INFO] Booting worker with pid: 7
+servicio-ia-1      | [2026-06-15 18:43:02 +0000] [8] [INFO] Booting worker with pid: 8
+servicio-ia-1      | [2026-06-15 18:43:02 +0000] [9] [INFO] Booting worker with pid: 9

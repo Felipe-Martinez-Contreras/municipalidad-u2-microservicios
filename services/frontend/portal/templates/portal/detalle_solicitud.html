@@ -1,0 +1,115 @@
+{% extends 'portal/base.html' %}
+{% block titulo %}{{ titulo }} - Portal Municipal{% endblock %}
+{% block contenido %}
+<div class="container-fluid">
+  <div class="row g-4">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0"><i class="bi bi-list-check me-2 text-primary"></i>{{ solicitud.codigo }}</h4>
+            <span class="badge fs-6
+              {% if solicitud.estado == 'aprobada' %}bg-success
+              {% elif solicitud.estado == 'rechazada' %}bg-danger
+              {% elif solicitud.estado == 'entregada' %}bg-secondary
+              {% elif solicitud.estado == 'pendiente' %}bg-warning text-dark
+              {% else %}bg-primary{% endif %}">
+              {{ solicitud.estado|capfirst }}
+            </span>
+          </div>
+          <hr>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="mb-1 text-muted small">Solicitante</p>
+              <p class="fw-semibold">{{ solicitud.solicitante_nombre }}</p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-1 text-muted small">Departamento</p>
+              <p class="fw-semibold">{{ solicitud.departamento_solicitante }}</p>
+            </div>
+          </div>
+          <div class="mb-3">
+            <p class="mb-1 text-muted small">Justificación</p>
+            <p>{{ solicitud.justificacion }}</p>
+          </div>
+          {% if solicitud.observacion_respuesta %}
+          <div class="mb-3">
+            <p class="mb-1 text-muted small">Respuesta</p>
+            <p>{{ solicitud.observacion_respuesta }}</p>
+          </div>
+          {% endif %}
+          {% if solicitud.detalles %}
+          <hr>
+          <h6 class="fw-bold mb-3">Productos solicitados</h6>
+          <table class="table table-sm">
+            <thead class="table-light">
+              <tr><th>Producto</th><th>Solicitado</th><th>Entregado</th></tr>
+            </thead>
+            <tbody>
+              {% for d in solicitud.detalles %}
+              <tr>
+                <td>{{ d.producto_nombre }}</td>
+                <td>{{ d.cantidad_solicitada }}</td>
+                <td>{{ d.cantidad_entregada }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      {% if puede_aprobar %}
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-check-circle me-2"></i>Aprobar / Rechazar</h5>
+          <form method="post" class="mb-2">
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="aprobada">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Observación</label>
+              <textarea name="observacion_respuesta" class="form-control" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mb-2">
+              <i class="bi bi-check-lg me-2"></i>Aprobar
+            </button>
+          </form>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="rechazada">
+            <div class="mb-3">
+              <textarea name="observacion_respuesta" class="form-control" rows="2"
+                placeholder="Motivo del rechazo..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger w-100">
+              <i class="bi bi-x-lg me-2"></i>Rechazar
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if puede_entregar %}
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-box-seam me-2"></i>Entregar</h5>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="entregada">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-check2-all me-2"></i>Marcar como Entregada
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
+      <a href="{% url 'mis_solicitudes' %}" class="btn btn-outline-secondary w-100">
+        <i class="bi bi-arrow-left me-2"></i>Volver
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

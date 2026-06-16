@@ -1,0 +1,88 @@
+{% extends 'portal/base.html' %}
+{% block titulo %}Nueva Solicitud - Portal Municipal{% endblock %}
+{% block contenido %}
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h4 class="fw-bold mb-4"><i class="bi bi-plus-circle me-2 text-primary"></i>Nueva Solicitud de Bodega</h4>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Justificación</label>
+              <textarea name="justificacion" class="form-control" rows="3"
+                placeholder="Explique por qué necesita estos materiales..." required></textarea>
+            </div>
+
+            <h6 class="fw-bold mt-4 mb-3"><i class="bi bi-box-seam me-2"></i>Productos solicitados</h6>
+            <div id="productos-container">
+              <div class="row g-2 mb-2 producto-row">
+                <div class="col-md-7">
+                  <select name="producto_id[]" class="form-select" required>
+                    <option value="">— Seleccionar producto —</option>
+                    {% for p in productos %}
+                    <option value="{{ p.id }}">{{ p.nombre }} (Stock: {{ p.stock_actual }} {{ p.unidad_medida }})</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input type="number" name="cantidad[]" class="form-control" placeholder="Cantidad" min="1" required>
+                </div>
+                <div class="col-md-2">
+                  <button type="button" class="btn btn-outline-danger w-100 btn-eliminar" onclick="eliminarFila(this)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary btn-sm mb-4" onclick="agregarProducto()">
+              <i class="bi bi-plus me-1"></i>Agregar producto
+            </button>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-send me-2"></i>Crear Solicitud
+              </button>
+              <a href="{% url 'mis_solicitudes' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const productosHTML = `{{ productos|length }}`;
+const opcionesHTML = `{% for p in productos %}<option value="{{ p.id }}">{{ p.nombre }} (Stock: {{ p.stock_actual }} {{ p.unidad_medida }})</option>{% endfor %}`;
+
+function agregarProducto() {
+  const container = document.getElementById('productos-container');
+  const div = document.createElement('div');
+  div.className = 'row g-2 mb-2 producto-row';
+  div.innerHTML = `
+    <div class="col-md-7">
+      <select name="producto_id[]" class="form-select" required>
+        <option value="">— Seleccionar producto —</option>
+        ${opcionesHTML}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <input type="number" name="cantidad[]" class="form-control" placeholder="Cantidad" min="1" required>
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-outline-danger w-100" onclick="eliminarFila(this)">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>`;
+  container.appendChild(div);
+}
+
+function eliminarFila(btn) {
+  const filas = document.querySelectorAll('.producto-row');
+  if (filas.length > 1) btn.closest('.producto-row').remove();
+}
+</script>
+{% endblock %}
