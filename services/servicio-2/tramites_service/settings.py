@@ -4,7 +4,14 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'tramites-secret-key')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY no está definida. Verifica el archivo .env")
+
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+if not DB_PASSWORD:
+    raise RuntimeError("DB_PASSWORD no está definida. Verifica el archivo .env")
+
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['*']
 
@@ -18,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_cryptography',
     'tramites',
 ]
 
@@ -56,14 +64,20 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'tramites_db'),
         'USER': os.environ.get('DB_USER', 'tramites_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'tramites_pass'),
+        'PASSWORD': DB_PASSWORD,
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
 # Clave JWT compartida con servicio-auth
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-compartido-todos-los-servicios')
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+if not JWT_SECRET_KEY:
+    raise RuntimeError("JWT_SECRET_KEY no está definida. Verifica el archivo .env")
+
+CRYPTOGRAPHY_KEY = os.environ.get('CRYPTOGRAPHY_KEY')
+if not CRYPTOGRAPHY_KEY:
+    raise RuntimeError("CRYPTOGRAPHY_KEY no está definida. Verifica el archivo .env")
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),

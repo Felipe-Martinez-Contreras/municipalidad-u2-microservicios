@@ -1,4 +1,5 @@
 from django.db import models
+from django_cryptography.fields import encrypt
 
 
 class TipoTramite(models.Model):
@@ -37,7 +38,7 @@ class Tramite(models.Model):
     ciudadano_id = models.IntegerField()
     ciudadano_email = models.EmailField()
     ciudadano_nombre = models.CharField(max_length=200)
-    ciudadano_rut = models.CharField(max_length=12)
+    ciudadano_rut = encrypt(models.CharField(max_length=12))
 
     # Funcionario asignado — también solo datos del JWT
     funcionario_id = models.IntegerField(null=True, blank=True)

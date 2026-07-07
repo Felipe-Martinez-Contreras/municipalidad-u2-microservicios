@@ -4,7 +4,15 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'bodega-secret-key')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY no está definida. Verifica el archivo .env")
+
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+if not DB_PASSWORD:
+    raise RuntimeError("DB_PASSWORD no está definida. Verifica el archivo .env")
+
+
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['*']
 
@@ -56,13 +64,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'bodega_db'),
         'USER': os.environ.get('DB_USER', 'bodega_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'bodega_pass'),
+        'PASSWORD': DB_PASSWORD,
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-compartido-todos-los-servicios')
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+if not JWT_SECRET_KEY:
+    raise RuntimeError("JWT_SECRET_KEY no está definida. Verifica el archivo .env")
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),

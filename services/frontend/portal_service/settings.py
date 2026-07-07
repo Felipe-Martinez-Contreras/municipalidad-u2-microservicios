@@ -3,7 +3,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'portal-secret-key')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY no está definida. Verifica el archivo .env")
+
+
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['*']
 
@@ -43,6 +47,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'portal_service.wsgi.application'
+
 
 # Sin base de datos — usamos sesiones en archivos
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'

@@ -4,7 +4,12 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'ai-service-secret-key')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY no está definida. Verifica el archivo .env")
+
+
+
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['*']
 
@@ -48,7 +53,9 @@ DATABASES = {
     }
 }
 
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-compartido-todos-los-servicios')
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+if not JWT_SECRET_KEY:
+    raise RuntimeError("JWT_SECRET_KEY no está definida. Verifica el archivo .env")
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),

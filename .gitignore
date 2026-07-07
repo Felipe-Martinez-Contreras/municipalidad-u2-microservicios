@@ -10,18 +10,26 @@ __pycache__/
 db.sqlite3
 staticfiles/
 media/
-
 # Entornos virtuales
 .venv/
 venv/
-
 # Editor / OS
 .vscode/
 *.swp
 .DS_Store
-
 # Backups de base de datos (contienen datos reales)
 scripts/backup/backups/*.sql
-
 # Archivo de respaldo histórico (pesado, no es código activo)
 docs/municipalidad_web_backup.tar.gz
+# Backups locales (pueden contener configuración sensible histórica)
+*.bak
+*.bak-*
+# Certificados y llaves TLS
+infrastructure/proxy/ssl/
+infrastructure/proxy/certs/
+*.crt
+*.key
+# Resultados de auditorías (pueden revelar superficie de ataque)
+lynis_*.dat
+lynis_*.log
+testssl_resultado.txt

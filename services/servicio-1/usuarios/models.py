@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from django_cryptography.fields import encrypt
 
 class Usuario(AbstractUser):
     class RolChoices(models.TextChoices):
@@ -23,7 +23,7 @@ class Usuario(AbstractUser):
     email = models.EmailField(unique=True, verbose_name='Correo electrónico')
     rol = models.CharField(max_length=20, choices=RolChoices.choices, default=RolChoices.CIUDADANO)
     departamento = models.CharField(max_length=20, choices=DeptoChoices.choices, blank=True, default='')
-    rut = models.CharField(max_length=12, unique=True)
+    rut = encrypt(models.CharField(max_length=12))
     telefono = models.CharField(max_length=15, blank=True)
 
     USERNAME_FIELD = 'email'
