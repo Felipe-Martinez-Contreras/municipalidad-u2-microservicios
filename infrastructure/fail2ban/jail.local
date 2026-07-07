@@ -1,0 +1,9 @@
+[sshd]
+enabled = true
+port = ssh
+filter = sshd[mode=aggressive]
+backend = systemd
+journalmatch = _SYSTEMD_UNIT=ssh.service
+maxretry = 3
+findtime = 300
+bantime = 600
